@@ -20,8 +20,7 @@ Após realiza a Dinâmica Prática 5–5–5 (Problemas, soluções atuais e pes
 
 
 #### 2.2 Matriz de seleção
-
-![alt text](arquivos/matrizSelecao.png)
+<img src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/matrizSelecao.png" Personas src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/matrizSelecao.png" width="500" height="250" /> <br>
 
 <inclua os resultados obtidos pelo grupo na matriz de seleção>
 <br> Ideia 1: <título da ideia>
@@ -37,7 +36,8 @@ Após realiza a Dinâmica Prática 5–5–5 (Problemas, soluções atuais e pes
 #### 2.3. Opportunity Card da ideia selecioanda
 
 a) exemplo de oportunit card (observe que neste caso o grupo não incluiu o item 5 e portante precisaria justificar o porque não foi realizado).
-![alt text](arquivos/opportunityCard.png)
+
+<img src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/opportunityCard.png" Personas src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/opportunityCard.png" width="500" height="330" /> <br>
 
 Descreva o que o foi definido pelo grupo para cada item abaixo referenta ao Opportunity Card da ideia selecioanda
 1. Área de afinidade/contexto
@@ -58,21 +58,25 @@ Entrevista com o usuário e identificação dos requisitos.(quando for o caso de
 Descrição textual das regras de negócio definidas como um subconjunto do mundo real cujos elementos são propriedades que desejamos incluir, processar, armazenar, gerenciar, atualizar, e que descrevem a proposta/solução a ser desenvolvida.
 <br>
 
-> O sistema proposto para a "Devcom Projetos conterá as informacões aqui detalhadas. Dos Projetos serão armazenados o número, nome e cidade. Dos Departamentos serão armazenados o número e nome. O cliente destacou que cada projeto pode ter vários departamentos auxiliando no seu desenvolvimento, e cada departamento pode estar envolvido em vários projetos. Os dados relativos aos empregados que serão armazenados são: rg, nome, cpf, salário, data inicial do salario e supervisor de cada empregado. É importante destacar que cada empregado pode ser supervisionado por outro empregado, e obrigatoriamente deve estar alocado a um único departamento, mas pode gerenciar vários departamentos ou não gerenciar nenhum. Um empregado também pode participar de vários projetos, caso seja necessário, mas não precisa obrigatoriamente estar alocado em algum projeto. Com relação aos dependentes serão armazenadas as informações de nome do dependente, data de nascimento, sexo e grau de parentesco. Cada empregado pode ter vários dependentes, mas um dependente esta associado apenas a um único empregado. Com relação ao histórico de salário devemos armazenar as informações de valor do salário, data de início do salário no período e data final do salário no período. É importante lembrar que cada funcionario pode ter diversos eventos de histórico de salário associados a ele visto que este dado pode ser alterado várias vezes..
+> <descrição>
 
 ### 4.  Validação da Ideia.<br>
 a) Link do formulário desenvolvido<br>
 b) Link para Relatório/Apresentação de resultados obtidos<br>
 
 ### 4.Personas e Histórias de usuário<br>
-![alt text](arquivos/personas_academia.png)
-<img src="https://neilpatel.com/wp-content/uploads/2019/07/exemplo-carlos.png" Personas src="https://neilpatel.com/wp-content/uploads/2019/07/exemplo-carlos.png" width="500" height="500" /> <br>
+<img src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/personas_academia.png" Personas src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/personas_academia.png" width="500" height="500" /> <br>
+
+
 a) inclusão dos Persons desenvolvidos pelo grupo<br>
 <br>
+<img src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/us_academia.png" Personas src="https://raw.githubusercontent.com/templatetrab/template_projeto_integrador/refs/heads/main/arquivos/us_academia.png" width="500" height="500" /> <br>
+
 <img src="https://miro.medium.com/max/1400/1*r5GVnOvqpMdxnGUYNRXqbg.png" UserStory src="https://miro.medium.com/max/1400/1*r5GVnOvqpMdxnGUYNRXqbg.png" width="500" height="300" /> <br>
 b) inclusão das Histórias de usuário desenvolvidas pelo grupo
 <br>
 
+![alt text](image.png)
 
 ### 5. PROTÓTIPOS DO SISTEMA<br>
 Neste ponto a codificação não e necessária, somente as ideias de telas devem ser desenvolvidas. O princípio aqui é pensar na criação da interface para identificar possíveis informações a serem armazenadas e/ou descartadas <br>
