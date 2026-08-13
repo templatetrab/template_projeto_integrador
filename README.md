@@ -204,5 +204,3 @@ http://sis4.com/brModelo/brModelo/download.html
 
 Link para curso de GIT<br>
 ![https://www.youtube.com/curso_git](https://www.youtube.com/playlist?list=PLo7sFyCeiGUdIyEmHdfbuD2eR4XPDqnN2?raw=true "Title")
-#   t e m p l a t e _ p r o j e t o _ i n t e g r a d o r  
- 
