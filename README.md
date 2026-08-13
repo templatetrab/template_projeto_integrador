@@ -1,5 +1,5 @@
 # TRABALHO DE PI:  Título do Trabalho
-Trabalho desenvolvido durante a disciplina de Banco de Dados do Integrado
+Trabalho desenvolvido durante a disciplina de projeto Integrador
 
 # Sumário
 
@@ -18,18 +18,58 @@ Descrição textual das regras de negócio definidas como um subconjunto do mund
 > O sistema proposto para a "Devcom Projetos conterá as informacões aqui detalhadas. Dos Projetos serão armazenados o número, nome e cidade. Dos Departamentos serão armazenados o número e nome. O cliente destacou que cada projeto pode ter vários departamentos auxiliando no seu desenvolvimento, e cada departamento pode estar envolvido em vários projetos. Os dados relativos aos empregados que serão armazenados são: rg, nome, cpf, salário, data inicial do salario e supervisor de cada empregado. É importante destacar que cada empregado pode ser supervisionado por outro empregado, e obrigatoriamente deve estar alocado a um único departamento, mas pode gerenciar vários departamentos ou não gerenciar nenhum. Um empregado também pode participar de vários projetos, caso seja necessário, mas não precisa obrigatoriamente estar alocado em algum projeto. Com relação aos dependentes serão armazenadas as informações de nome do dependente, data de nascimento, sexo e grau de parentesco. Cada empregado pode ter vários dependentes, mas um dependente esta associado apenas a um único empregado. Com relação ao histórico de salário devemos armazenar as informações de valor do salário, data de início do salário no período e data final do salário no período. É importante lembrar que cada funcionario pode ter diversos eventos de histórico de salário associados a ele visto que este dado pode ser alterado várias vezes..
  
  
+### 3. Ideias Selecionadas, Matriz de selecao e OpportunityCard
+
+#### 3.1 Ideias Selecionadas pelo grupos
+Após realiza a Dinâmica Prática 5–5–5 (Problemas, soluções atuais e pessoas),  descreva as 2 principais ideias definidas pelo grupo .<br>
+
+<br> Ideia 1: 
+<br> Ideia 2: 
+
+
+#### 3.1 Matriz de seleção
+
+![alt text](arquivos/matrizSelecao.png)
+
+<inclua os resultados obtidos pelo grupo na matriz de seleção>
+<br> Ideia 1: <título da ideia>
+<br> afinidade [ ], processo [ ], problema [ ], valor do software [ ], viabilidade [ ]
+<br> Nota final: [ ]
+
+<br> Ideia 2: <título da ideia>
+<br>afinidade [ ], processo [ ], problema [ ], valor do software [ ], viabilidade [ ]
+<br> Nota final: [ ]
+
+
+
+#### 3.2. Opportunity Card da ideia selecioanda
+
+a) exemplo de oportunit card (observe que neste caso o grupo não incluiu o item 5 e portante precisaria justificar o porque não foi realizado).
+![alt text](arquivos/opportunityCard.png)
+
+Descreva o que o foi definido pelo grupo para cada item abaixo referenta ao Opportunity Card da ideia selecioanda
+1. Área de afinidade/contexto
+2. Problema percebido
+3. Quem possui o problema
+4. Como é resolvido hoje
+5. Soluções semelhantes
+6. Lacuna inicial
+7. Pessoas acessíveis
+8. Hipótese de oportunidade
+9. Fomento/oportunidade
+10. Principal incerteza/desafio
+
+
+
+
+
 ### 3.PMC<br>
 ![Exemplo de PMC](https://github.com/discproint/template_projeto_integrador/blob/main/arquivos/PMC.jpg?raw=true "PMC")
 
-
-
 a) inclusão do PMC desenvolvido pelo grupo <br>
 
-#### 3.1. EAP - Estrutura Analítica do Projeto
-a) Incluír imagem da EAP 
-b) Dicinário da EAP 
 
-#### 3.2. Requisitos funcionais e não funcionais
+#### 3.3. Requisitos funcionais e não funcionais
 Incluir informações de: Identificador , Descrição e Prioridade
 Exemplos:<br>
 a) <img src="https://raw.githubusercontent.com/discproint/template_projeto_integrador/main/arquivos/requisitos_funcionais.png" width="350" height="100" /> <br>
@@ -56,7 +96,7 @@ Sugestão: https://balsamiq.com/products/mockups/<br>
 ![Alt text](https://github.com/discproint/template_projeto_integrador/blob/main/arquivos/balsamiq.png?raw=true "Title")
 ![Arquivo PDF do Protótipo Balsamiq feito para Empresa Devcom](https://github.com/discproint/template_projeto_integrador/blob/main/arquivos/EmpresaDevcom.pdf?raw=true "Empresa Devcom")
 
-#### 5.1 PROTÓTIPO DO SISTEMA MOBILE
+#### 5.1 PROTÓTIPO DO SISTEMA MOBILE 
 
 #### 5.2 PROTÓTIPO DO SISTEMA WEB
 
@@ -164,3 +204,5 @@ http://sis4.com/brModelo/brModelo/download.html
 
 Link para curso de GIT<br>
 ![https://www.youtube.com/curso_git](https://www.youtube.com/playlist?list=PLo7sFyCeiGUdIyEmHdfbuD2eR4XPDqnN2?raw=true "Title")
+#   t e m p l a t e _ p r o j e t o _ i n t e g r a d o r  
+ 
