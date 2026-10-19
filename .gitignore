@@ -1,1 +1,8 @@
-arquivos_locais/
+venv/
+__pycache__/
+*.pyc
+out/
+*.log
+db.sqlite3
+.env
+.env.txt
