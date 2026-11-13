@@ -1,0 +1,182 @@
+# User Story: [US-014] Papel de administrador e area admin
+
+**Epic:** EPIC-006 Administracao e aprovacao de profissionais
+**GitHub Epic Issue:** -
+**GitHub US Issue:** -
+**Prioridade:** Alta
+**Story Points:** 5
+**Sprint:** Sprint 03
+**Status:** Review
+**Behavior Change Esperado:** YES
+
+---
+
+## Historia
+
+**Como** administrador do HelpMe
+**Eu quero** entrar pelo login normal e cair numa area exclusiva de administracao
+**Para que** gerenciar o sistema sem depender do painel do Supabase
+
+### Contexto Adicional
+
+Base de seguranca do EPIC-006 (D6). O admin fica na tabela `administradores` (nao e um `tipo_usuario`, BR05 inalterada) e e criado so pelo SQL Editor. Primeira migration incremental (D7): `supabase/migrations/003_admin.sql`.
+
+- **Requisitos de origem:** FR15, BR11, NFR08, NFR11 (`docs/requirements/helpme-mvp-marco2.md` (rev. 3))
+- **Decisoes:** D6, D7 (`docs/DECISOES.md`)
+- **Dependencias:** DEBT-004 (`main` estavel)
+- **Repositorio de codigo:** raiz deste repositorio (branch de trabalho a partir de `main`, depois do DEBT-004)
+
+### Pontos de Esclarecimento
+
+- Nenhum ponto pendente.
+
+---
+
+## Criterios de Aceitacao
+
+- [ ] **Criterio 1:** `003_admin.sql` cria `administradores (usuario_id pk → usuarios)` com RLS ligado e a funcao `eh_admin()` (`security definer`, `stable`, `search_path` fixo); nenhuma politica permite ao app inserir/alterar/apagar linhas em `administradores`.
+- [ ] **Criterio 2:** Usuario presente em `administradores` que faz login e levado para `admin.html` (pagina com menu: Painel, Fila de analise, Categorias, Sair), antes da regra de cliente/profissional.
+- [ ] **Criterio 3:** Cliente ou profissional que abre `admin.html` (ou qualquer `admin*.html`) e redirecionado para a pagina inicial do proprio tipo; visitante vai ao login com `?voltar=`.
+- [ ] **Criterio 4:** `signUp` com `tipo_usuario = 'admin'` nos metadados cria um cliente comum, sem acesso admin.
+- [ ] **Criterio 5:** `validar_profissional` permite mudar `status_aprovacao` quando `eh_admin()` for verdadeiro e continua recusando a mudanca feita pelo proprio profissional pelo console.
+- [ ] **Criterio 6:** Roteiro `supabase/testes/003_admin.sql` (NFR11) cobre os criterios 1, 4 e 5 e passa; `supabase/README.md` explica como cadastrar o primeiro admin (A09).
+- [ ] **Criterio 7:** **Mobile (NFR04):** a tela funciona sem rolagem horizontal em 360px de largura e botoes tem area de toque de pelo menos 44px.
+- [ ] **Criterio 8:** **Acessibilidade (NFR05):** campos tem `<label>`, foco visivel em todos os elementos interativos e texto com contraste adequado.
+- [ ] **Criterio 9:** **Seguranca (NFR01):** nenhum dado fixo/demo e nenhuma `service_role` no front; toda leitura/escrita passa pelo RLS.
+
+---
+
+## Governanca e Rastreabilidade
+
+- **Nivel ScrumAIDev:** 1
+- **Justificativa do nivel:** Toca autorizacao (novo papel com privilegio) e altera trigger de seguranca; cenarios BDD com revisao manual registram o comportamento.
+- **US exige Spec governada?** Nao
+- **Justificativa da Spec:** Regras ja estao em `docs/requirements/helpme-mvp-marco2.md` (rev. 3) e serao versionadas em SQL; front estatico sem API propria.
+- **Spec prevista:** N/A
+- **US exige Contract governado?** Nao
+- **Justificativa do Contract:** Nao ha API propria; o boundary e o Supabase (PostgREST/RPC) protegido por RLS, documentado em `supabase/`.
+- **Contract previsto:** N/A
+- **Padrao de erro aplicavel:** N/A
+- **BDD previsto:** `docs/bdd/aprovacao_profissionais.feature` (revisao manual)
+- **Gates opcionais aplicaveis:** N/A (sem runner de testes no projeto); roteiro SQL manual em `supabase/testes/` quando a story mexe no banco (NFR11)
+- **Touch List preliminar:** supabase/migrations/003_admin.sql (novo), supabase/testes/003_admin.sql (novo), supabase/README.md, helpme-app/js/sessao.js, helpme-app/admin.html (novo), helpme-app/js/admin.js (novo)
+- **Task Issues previstas:** N/A
+
+---
+
+## Mockups/Wireframes
+
+Seguir o padrao visual atual (`global.css`, `auth.css`, `dashboard.css`, cards com `<template>`); conferir antes o resultado do DEBT-005 (`refactor/ui-polish`).
+
+---
+
+## Notas Tecnicas
+
+### Arquitetura
+
+- **Componentes afetados:** ver Touch List.
+- **APIs necessarias:** Supabase JS v2 via CDN (Auth/PostgREST/RPC).
+- **Database changes:** Nova migration `003_admin.sql`: tabela `administradores`, funcao `eh_admin()`, ajuste em `validar_profissional`. Nao edita nem reaplica o `001` (D7).
+- **Referencias do modelo de dados:** `supabase/migrations/001_schema.sql`, `supabase/migrations/002_privacidade_data_nascimento.sql`
+- **Erros observaveis esperados:** mensagens amigaveis na tela para falha de rede/permissao; detalhes so no console.
+
+### Dependencias
+
+- [ ] DEBT-004 (`main` estavel)
+
+### Consideracoes de Performance
+
+- Consultas filtradas no banco (nao carregar tabelas inteiras); listas pequenas no MVP.
+
+---
+
+## Plano de Testes
+
+### Testes Unitarios
+
+- [ ] N/A (sem runner no projeto)
+
+### Testes de Integracao
+
+- [ ] N/A
+
+### Testes de Contract
+
+- [ ] N/A
+
+### Testes Manuais
+
+- [ ] Logar com o admin criado pelo SQL Editor → cai em `admin.html`.
+- [ ] Logar como cliente e como profissional e abrir `admin.html` → redirecionados.
+- [ ] Pelo console, como profissional pendente: `update profissionais set status_aprovacao='aprovado'` → erro.
+- [ ] Executar `supabase/testes/003_admin.sql` no SQL Editor → todas as checagens OK.
+- [ ] Criterios comuns de mobile/acessibilidade verificados (DevTools 360px, navegacao por Tab).
+
+### BDD / Cenarios de Comportamento
+
+- [ ] `docs/bdd/aprovacao_profissionais.feature` (revisao manual)
+
+---
+
+## Tasks (Breakdown)
+
+- [ ] **[TASK-001]** Migration 003 (tabela, `eh_admin()`, trigger)
+  - GitHub Task Issue: N/A
+  - Estimativa: -
+  - Assignee: -
+- [ ] **[TASK-002]** Roteiro de testes de RLS 003
+  - GitHub Task Issue: N/A
+  - Estimativa: -
+  - Assignee: -
+- [ ] **[TASK-003]** Destino admin e `exigirSessao('admin')` em `sessao.js`
+  - GitHub Task Issue: N/A
+  - Estimativa: -
+  - Assignee: -
+- [ ] **[TASK-004]** Casca `admin.html` com menu e Sair
+  - GitHub Task Issue: N/A
+  - Estimativa: -
+  - Assignee: -
+
+---
+
+## IA Insights
+
+### Sugestoes de Implementacao
+
+Em `sessao.js`, consultar `rpc('eh_admin')` uma vez no `destinoDoUsuario` e no `exigirSessao('admin')`; manter `calcularDestino` como funcao pura recebendo `ehAdmin`.
+
+### Riscos Identificados
+
+Erro em `eh_admin()` ou numa politica expoe dados de todos os usuarios; revisao por quem nao escreveu e obrigatoria.
+
+### Alternativas Consideradas
+
+Ver `docs/requirements/helpme-mvp-marco2.md` (rev. 3) (Key Decisions) e `docs/discovery/helpme-mvp-marco2.md` (rev. 3) — descartados: coleta de CPF/documento, APIs externas de verificacao, aprovacao automatica total, admin como `tipo_usuario`.
+
+---
+
+## Notas e Comentarios
+
+- 2026-10-16: story gerada no Modo Backlog a partir de `docs/requirements/helpme-mvp-marco2.md` (rev. 3), aprovada pelo usuario.
+- 2026-11-13: em andamento em `feat/US-014-admin` (breakdown em `docs/tasks/breakdown_US-014.md`). Front pronto e testado: 20/20 no Edge, com login real e `eh_admin` simulado no caminho do admin. `003_admin.sql` e `supabase/testes/003_admin.sql` escritos; **ainda nao aplicados nem executados no banco real** (aguardando o OK do PO). DEBT-005: `refactor/ui-polish` descartado por agora (PO).
+- 2026-11-13: `003_admin.sql` aplicada no Supabase real pelo PO (SQL Editor). Conferencia por leitura: tabela com RLS e 0 politicas, sem SELECT para `authenticated`, `eh_admin()` security definer/stable/search_path fixo, trigger atualizado. `supabase/testes/003_admin.sql` rodado pelo PO: **11/11 ok** (C1a-C1f, C4a-C4b, C5a-C5c). Falta criar `admin@helpme.test` e o teste de tela com login real de admin.
+- 2026-11-13: `admin@helpme.test` (Equipe HelpMe) criado pelo PO. Teste de tela ponta a ponta no Supabase real, sem simulacao: **9/9** (admin entra em `admin.html`, 360px, Sair; cliente e prof1 barrados em `admin.html`; prof3 pendente continua em `bloqueio.html`). Status: Review (falta code review por quem nao escreveu e validacao do PO).
+
+---
+
+## Definition of Done Checklist
+
+- [ ] Codigo implementado conforme criterios de aceitacao
+- [ ] Decisao sobre Spec governada foi registrada
+- [ ] Decisao sobre Contract governado foi registrada
+- [ ] Nivel ScrumAIDev foi registrado
+- [ ] Spec, Contract e BDD foram atualizados quando aplicavel
+- [ ] Gates opcionais executados ou dispensados com justificativa
+- [ ] Error handling observavel segue o padrao compartilhado quando aplicavel
+- [ ] Code review aprovado
+- [ ] Testes unitarios com cobertura adequada (N/A — sem runner; dispensado)
+- [ ] Testes de integracao e contract passando (N/A — dispensado)
+- [ ] Documentacao atualizada
+- [ ] Build/CI passando (N/A — sem build)
+- [ ] `Behavior change` documentado no PR
+- [ ] Aprovacao do Product Owner
