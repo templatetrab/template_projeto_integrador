@@ -1,0 +1,135 @@
+<!--
+  TELA: Contratações (contratacoes.html) — US-008 (profissional) e US-009 (cliente)
+  OBJETIVO: Profissional aprovado vê as contratações recebidas e aceita ou recusa as 'solicitada';
+  é a página inicial dele (DESTINO_PROFISSIONAL_APROVADO em js/servicos/sessao.js).
+  Cliente vê as próprias contratações ("Minhas contratações") e abre o acompanhamento de cada uma
+  (espera-cliente.html ou servico-andamento.html, decisão D8).
+  REGRAS: exige sessão. O banco só devolve as contratações de que a pessoa é parte (RLS)
+  e só aceita as transições válidas (trigger validar_contratacao, BR06).
+  ELEMENTOS (ids usados pelo js/telas/contratacoes.js):
+  - #contratacoes-carregando / #contratacoes-erro (+ #btn-tentar-novamente) / #contratacoes-vazio.
+  - #contratacoes-aviso: avisos de ação (ex.: "Esta solicitação foi cancelada").
+  - #titulo-pagina / #subtitulo-pagina: textos trocados pelo JS conforme o papel.
+  - Grupos #grupo-solicitadas, #grupo-aceitas, #grupo-encerradas, cada um com .titulo-grupo, contador e .grade-pedidos.
+  - Menu lateral montado por js/telas/navegacao.js (DEBT-009) a partir de uma lista única: visitante vê
+    "Entrar" (logo vai ao login); cliente vê "Minhas contratações" e "Meu perfil"; profissional vê "Meu painel", "Editar meu perfil"
+    e o perfil público; admin vê "Meu painel". [data-menu-conta] vira "Entrar" ou #btn-sair.
+  - <template id="modelo-card-contratacao">: card de cada contratação (preenchido só com textContent).
+  - "Sair" (data-sair-para) volta para a home pública.
+  - Scripts: Supabase CDN -> js/servicos/supabase-config.js -> js/servicos/sessao.js -> js/servicos/contratacao-comum.js -> js/telas/navegacao.js -> js/telas/contratacoes.js.
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpMe - Contratações</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/contratacao.css">
+</head>
+<body class="painel">
+
+    <!-- Barra lateral de navegação -->
+    <aside class="sidebar">
+        <a href="contratacoes.html" class="sidebar-logo">
+            <span class="logo-icone">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            HelpMe
+        </a>
+
+        <!-- Menu por papel (DEBT-009): montado por js/telas/navegacao.js a partir de uma lista única
+             (ITENS_MENU). O que está aqui é o menu de visitante, que fica se o JS não rodar. -->
+        <nav class="sidebar-menu" data-menu-papel data-sair-para="home-cliente.html">
+            <a href="home-cliente.html" class="menu-item">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+                Início
+            </a>
+        </nav>
+
+        <!-- Vira "Entrar" ou o botão "Sair" (#btn-sair) conforme a sessão -->
+        <a href="index.html" class="menu-item menu-sair" data-menu-conta>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+            Entrar
+        </a>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <main class="conteudo">
+        <header class="conteudo-cabecalho">
+            <div>
+                <h1 id="titulo-pagina">Contratações</h1>
+                <p id="subtitulo-pagina" class="subtitulo">A lista se atualiza sozinha.</p>
+            </div>
+        </header>
+
+        <p id="contratacoes-aviso" class="aviso-lista" role="status" tabindex="-1" hidden></p>
+
+        <p id="contratacoes-carregando" class="subtitulo" role="status">Carregando contratações...</p>
+
+        <div id="contratacoes-erro" class="feed-vazio" role="alert" hidden>
+            <h2>Não foi possível carregar as contratações</h2>
+            <p>Verifique sua conexão com a internet e tente novamente.</p>
+            <button type="button" id="btn-tentar-novamente" class="btn-secundario">Tentar novamente</button>
+        </div>
+
+        <div id="contratacoes-vazio" class="feed-vazio" hidden>
+            <h2>Nenhuma contratação ainda</h2>
+            <p id="texto-vazio">Quando houver uma contratação, ela aparece aqui.</p>
+        </div>
+
+        <section id="grupo-solicitadas" class="grupo-contratacoes" aria-labelledby="titulo-solicitadas" hidden>
+            <h2 id="titulo-solicitadas"><span class="titulo-grupo">Aguardando sua resposta</span> <span class="contador-grupo"></span></h2>
+            <div class="grade-pedidos"></div>
+        </section>
+
+        <section id="grupo-aceitas" class="grupo-contratacoes" aria-labelledby="titulo-aceitas" hidden>
+            <h2 id="titulo-aceitas"><span class="titulo-grupo">Aceitas</span> <span class="contador-grupo"></span></h2>
+            <div class="grade-pedidos"></div>
+        </section>
+
+        <section id="grupo-encerradas" class="grupo-contratacoes" aria-labelledby="titulo-encerradas" hidden>
+            <h2 id="titulo-encerradas"><span class="titulo-grupo">Encerradas</span> <span class="contador-grupo"></span></h2>
+            <div class="grade-pedidos"></div>
+        </section>
+    </main>
+
+    <!-- Modelo de card (clonado pelo JS para cada contratação) -->
+    <template id="modelo-card-contratacao">
+        <article class="card-pedido">
+            <div class="card-topo">
+                <div class="card-titulo">
+                    <span class="card-numero"></span>
+                    <span class="card-tempo"></span>
+                </div>
+                <span class="badge-status"></span>
+            </div>
+
+            <p class="card-cliente card-data"></p>
+
+            <p class="card-descricao"></p>
+
+            <p class="card-endereco">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <span class="texto-endereco"></span>
+            </p>
+
+            <div class="acoes-card"></div>
+        </article>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/servicos/supabase-config.js"></script>
+    <script src="js/servicos/sessao.js"></script>
+    <script src="js/servicos/contratacao-comum.js"></script>
+    <script src="js/telas/navegacao.js"></script>
+    <script src="js/telas/contratacoes.js"></script>
+
+</body>
+</html>
